@@ -3,6 +3,6 @@ defmodule AocWeb.PageControllerTest do
 
   test "GET /", %{conn: conn} do
     conn = get(conn, ~p"/")
-    assert html_response(conn, 200) =~ "No cześć co tam jak tam halo jak tam praca?"
+    assert html_response(conn, 200) =~ "No cześć Żenia co tam jak tam halo jak tam praca?"
   end
 end
