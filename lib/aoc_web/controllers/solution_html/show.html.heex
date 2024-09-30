@@ -1,0 +1,70 @@
+<.header>
+  Advent of Code <%= @year %> - Day <%= @day %>
+  <:subtitle>
+    <.link href={~p"/"}>All Solutions</.link>
+    | <.link href={@problem.problem_url} target="_blank">Problem Description</.link>
+    | <.link href={@problem.problem_input_url} target="_blank">Download Input</.link>
+  </:subtitle>
+</.header>
+
+<.form
+  :let={f}
+  for={%{}}
+  as={:solution}
+  action={~p"/#{@year}/#{@day}/solve"}
+  method="post"
+  id="solution-form"
+>
+  <.input type="hidden" name="year" value={@year} />
+  <.input type="hidden" name="day" value={@day} />
+  <div class="space-y-8 bg-white mt-10">
+    <div class="border-b border-gray-900/10 pb-12">
+      <h2 class="text-base font-semibold leading-7 text-gray-900">Solution Code</h2>
+      <pre class="mt-2 text-sm text-gray-500"><code class="language-elixir"><%= @solution_code %></code></pre>
+    </div>
+    <div class="border-b border-gray-900/10 pb-12">
+      <h2 class="text-base font-semibold leading-7 text-gray-900">Input</h2>
+      <pre class="mt-2 text-sm text-gray-500 max-h-40 overflow-y-auto"><code><%= @input %></code></pre>
+    </div>
+    <div>
+      <h2 class="text-base font-semibold leading-7 text-gray-900">Solve</h2>
+      <div class="mt-2 flex items-end gap-x-4">
+        <div>
+          <.input
+            type="select"
+            label="Part"
+            name="part"
+            value="silver"
+            options={[{"Silver", "silver"}, {"Gold", "gold"}]}
+          />
+        </div>
+        <div>
+          <.button type="submit" phx-disable-with="Solving...">Solve</.button>
+        </div>
+      </div>
+    </div>
+    <div id="result" class="text-sm text-gray-500"></div>
+  </div>
+</.form>
+
+<script>
+  document.getElementById('solution-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    fetch(e.target.action, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('result').textContent = `Result: ${data.result}`;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      document.getElementById('result').textContent = 'An error occurred while solving the problem.';
+    });
+  });
+</script>
