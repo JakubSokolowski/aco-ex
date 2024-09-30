@@ -115,3 +115,7 @@ if config_env() == :prod do
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
 end
+
+config :aoc,
+       :solutions_path,
+       System.get_env("AOC_SOLUTIONS_PATH") || Path.expand("lib/aoc/solutions", File.cwd!())
