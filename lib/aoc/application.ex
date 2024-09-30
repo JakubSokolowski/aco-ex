@@ -7,6 +7,9 @@ defmodule Aoc.Application do
 
   @impl true
   def start(_type, _args) do
+    solutions_path = Application.fetch_env!(:aoc, :solutions_path)
+    Code.prepend_path(solutions_path)
+
     children = [
       AocWeb.Telemetry,
       Aoc.Repo,

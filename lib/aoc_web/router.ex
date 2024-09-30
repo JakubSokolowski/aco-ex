@@ -18,6 +18,8 @@ defmodule AocWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/:year/:day", SolutionController, :show
+    post "/:year/:day/solve", SolutionController, :solve
   end
 
   # Other scopes may use custom stacks.
