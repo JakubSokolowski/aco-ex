@@ -1,4 +1,6 @@
 defmodule Aoc.Solver do
+  require Logger
+
   @solutions_path "lib/aoc/solutions"
 
   @spec get_problem!(year :: integer, day :: integer) :: map
@@ -32,7 +34,7 @@ defmodule Aoc.Solver do
   @spec get_solution_source_code(year :: integer, day :: integer) :: String.t()
   def get_solution_source_code(year, day) do
     module = get_solution_module(year, day)
-    IO.puts("Module: #{inspect(module)}")
+    Logger.info("Module: #{inspect(module)}")
 
     filename =
       module
@@ -42,6 +44,9 @@ defmodule Aoc.Solver do
       |> Kernel.<>(".ex")
 
     path = Path.join([@solutions_path, "year#{year}", filename])
+
+    Logger.info("Attempting to read module #{module} from #{path}")
+    Logger.info("Path contents: #{inspect(File.ls(@solutions_path))}")
 
     case File.read(path) do
       {:ok, source_code} ->
