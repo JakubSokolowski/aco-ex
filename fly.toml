@@ -15,6 +15,7 @@ kill_signal = 'SIGTERM'
 [env]
   PHX_HOST = 'aoc-ex.fly.dev'
   PORT = '8080'
+  SOLUTIONS_PATH = '/app/lib/aoc/solutions'
 
 [http_service]
   internal_port = 8080
