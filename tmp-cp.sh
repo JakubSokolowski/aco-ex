@@ -4,7 +4,7 @@
 mkdir -p ./tmp
 
 # Get list of all Elixir files tracked by git
-git ls-files | grep -E '\.(ex|exs)$' | while read -r file; do
+git ls-files | grep -E '\.(heex)$' | while read -r file; do
     # Get the base filename
     basename=$(basename "$file")
 
