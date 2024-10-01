@@ -13,13 +13,25 @@ defmodule Aoc.Solutions.Year2020.Day01 do
     end
   end
 
-  def to_nums(input) do
+  @impl true
+  def gold(input) do
+    nums =
+      input
+      |> to_nums()
+
+    case find_triplet_sum(nums, 2020) do
+      {a, b, c} -> "#{a * b * c}"
+      _ -> "No triplet found"
+    end
+  end
+
+  defp to_nums(input) do
     String.split(input, "\n")
     |> Enum.reject(&(&1 == ""))
     |> Enum.map(&String.to_integer/1)
   end
 
-  def find_pair_sum(nums, target) do
+  defp find_pair_sum(nums, target) do
     Enum.reduce_while(nums, MapSet.new(), fn num, seen ->
       missing = target - num
 
@@ -35,7 +47,7 @@ defmodule Aoc.Solutions.Year2020.Day01 do
     end
   end
 
-  def find_triplet_sum(nums, target) do
+  defp find_triplet_sum(nums, target) do
     pairs_lookup =
       Enum.reduce(nums, Map.new(), fn num, lookup ->
         new_target = target - num
@@ -54,17 +66,5 @@ defmodule Aoc.Solutions.Year2020.Day01 do
         _ -> nil
       end
     end)
-  end
-
-  @impl true
-  def gold(input) do
-    nums =
-      input
-      |> to_nums()
-
-    case find_triplet_sum(nums, 2020) do
-      {a, b, c} -> "#{a * b * c}"
-      _ -> "No triplet found"
-    end
   end
 end
