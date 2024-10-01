@@ -88,7 +88,7 @@ ENV MIX_ENV="prod"
 COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/aoc ./
 
 # Hack?
-COPY --from=builder --chown=nobody:root /app/lib/aoc/solutions ./lib/aoc/solutions
+COPY --from=builder --chown=nobody:root /app/lib/aoc/solutions /aoc/solutions
 
 USER nobody
 
