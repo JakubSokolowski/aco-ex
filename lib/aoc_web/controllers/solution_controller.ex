@@ -8,13 +8,14 @@ defmodule AocWeb.SolutionController do
 
     problem = Solver.get_problem!(year, day)
     solution_code = Solver.get_solution_source_code(year, day)
+    highlighted_code = AocWeb.SyntaxHighlighter.higlight(solution_code, "elixir")
     input = Solver.fetch_input(year, day)
 
     render(conn, :show,
       year: year,
       day: day,
       problem: problem,
-      solution_code: solution_code,
+      solution_code: highlighted_code,
       input: input,
       part: "silver"
     )
