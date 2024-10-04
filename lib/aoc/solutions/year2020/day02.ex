@@ -40,9 +40,16 @@ defmodule Aoc.Solutions.Year2020.Day02 do
     min_match != max_match
   end
 
-  @spec parse(String.t()) :: %{min: integer, max: integer, char: String.t(), password: String.t()}
+  @spec parse(String.t()) ::
+          %{min: integer, max: integer, char: String.t(), password: String.t()}
   def parse(line) do
     [min, max, char, _, password] = String.split(line, ~r/[-: ]/)
-    %{min: String.to_integer(min), max: String.to_integer(max), char: char, password: password}
+
+    %{
+      min: String.to_integer(min),
+      max: String.to_integer(max),
+      char: char,
+      password: password
+    }
   end
 end
