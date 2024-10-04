@@ -31,7 +31,12 @@ defmodule Aoc.Solutions.Year2020.Day03 do
     count_recursive(grid, {0, 0}, slope, 0)
   end
 
-  @spec count_recursive(list(list(String.t())), {integer, integer}, {integer, integer}, integer) ::
+  @spec count_recursive(
+          list(list(String.t())),
+          {integer, integer},
+          {integer, integer},
+          integer
+        ) ::
           integer
   defp count_recursive(grid, {x, y} = _position, {right, down} = slope, count) do
     width = length(hd(grid))
