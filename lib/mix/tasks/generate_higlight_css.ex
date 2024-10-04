@@ -7,7 +7,8 @@ defmodule Mix.Tasks.GenerateHighlightCss do
       Makeup.Styles.HTML.StyleMap.algol_style()
       |> Makeup.stylesheet()
 
-    File.write!("priv/static/assets/highlight.css", css)
-    Mix.shell().info("Generated highlight.css")
+    output_path = Path.join(["assets", "css", "highlight.css"])
+    File.write!(output_path, css)
+    Mix.shell().info("Generated highlight.css in #{output_path}")
   end
 end
