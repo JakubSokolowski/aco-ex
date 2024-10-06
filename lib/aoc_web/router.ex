@@ -14,14 +14,6 @@ defmodule AocWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", AocWeb do
-    pipe_through :browser
-
-    get "/", PageController, :home
-    get "/:year/:day", SolutionController, :show
-    post "/:year/:day/solve", SolutionController, :solve
-  end
-
   # Other scopes may use custom stacks.
   # scope "/api", AocWeb do
   #   pipe_through :api
@@ -42,5 +34,12 @@ defmodule AocWeb.Router do
       live_dashboard "/dashboard", metrics: AocWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
+  end
+
+  scope "/", AocWeb do
+    pipe_through :browser
+    get "/", PageController, :home
+    get "/:year/:day", SolutionController, :show
+    post "/:year/:day/solve", SolutionController, :solve
   end
 end
