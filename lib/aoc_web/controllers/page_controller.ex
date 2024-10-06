@@ -8,7 +8,8 @@ defmodule AocWeb.PageController do
     solutions = [
       %{year: 2020, day: 1},
       %{year: 2020, day: 2},
-      %{year: 2020, day: 3}
+      %{year: 2020, day: 3},
+      %{year: 2020, day: 4}
     ]
 
     render(conn, :home, layout: false, solutions: solutions)
