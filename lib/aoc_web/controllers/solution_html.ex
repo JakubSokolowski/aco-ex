@@ -10,7 +10,7 @@ defmodule AocWeb.SolutionHTML do
 
   def solution_form(assigns) do
     ~H"""
-    <.form for={%{part: "silver"}} action={~p"/#{@year}/#{@day}/solve"} phx-submit="solve">
+    <.form for={%{part: "silver"}} action={~p"/solutions/#{@year}/#{@day}/solve"} phx-submit="solve">
       <.input
         type="select"
         name="part"
