@@ -6,7 +6,7 @@ defmodule AocWeb.PageController do
     # so skip the default app layout.
 
     solutions = [
-      %{year: 2020, days: [1, 2, 3, 4]}
+      %{year: 2020, days: [1, 2, 3, 4, 5]}
     ]
 
     render(conn, :home, layout: false, solutions: solutions)
