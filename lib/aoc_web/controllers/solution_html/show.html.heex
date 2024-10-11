@@ -23,10 +23,10 @@
 </.header>
 
 <.form
-  :let={f}
+  :let={_f}
   for={%{}}
   as={:solution}
-  action={~p"/#{@year}/#{@day}/solve"}
+  action={~p"/solutions/#{@year}/#{@day}/solve"}
   method="post"
   id="solution-form"
 >

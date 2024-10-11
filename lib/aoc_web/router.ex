@@ -10,6 +10,13 @@ defmodule AocWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  scope "/", AocWeb do
+    pipe_through :browser
+    get "/", PageController, :home
+    get "/solutions/:year/:day", SolutionController, :show
+    post "/solutions/:year/:day/solve", SolutionController, :solve
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -34,12 +41,5 @@ defmodule AocWeb.Router do
       live_dashboard "/dashboard", metrics: AocWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
-  end
-
-  scope "/", AocWeb do
-    pipe_through :browser
-    get "/", PageController, :home
-    get "/:year/:day", SolutionController, :show
-    post "/:year/:day/solve", SolutionController, :solve
   end
 end
