@@ -60,7 +60,9 @@ defmodule Aoc.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:makeup, "~> 1.0"},
-      {:makeup_elixir, "~> 0.16"}
+      {:makeup_elixir, "~> 0.16"},
+      {:igniter, "~> 0.3"},
+      {:tz, "~> 0.28"}
     ]
   end
 
