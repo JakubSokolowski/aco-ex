@@ -3,21 +3,21 @@ defmodule AocWeb.PageController do
 
   def home(conn, _params) do
     available = list_solutions()
+    dbg(available)
     solutions = build_solutions_struct(available)
 
     render(conn, :home, layout: false, solutions: solutions)
   end
 
   defp list_solutions() do
-    IO.puts("Available solutions:")
-
     :code.all_available()
     |> Enum.map(fn {module, _filename, _loaded} -> List.to_string(module) end)
     |> Enum.filter(&solution_module?/1)
+    |> Enum.uniq()
   end
 
   defp solution_module?(module) do
-    String.starts_with?(module, "Elixir.Aoc.Solutions.")
+    String.starts_with?(module, "Elixir.Aoc.Solutions.") and !String.ends_with?(module, "Test")
   end
 
   defp build_solutions_struct(available) do

@@ -29,7 +29,7 @@ defmodule Mix.Tasks.AocGenerateDay do
   end
 
   def igniter(igniter, argv) do
-    {arguments, argv} = positional_args!(argv)
+    {arguments} = positional_args!(argv)
 
     day = get_day(Map.get(arguments, :day))
     year = get_year(Map.get(arguments, :year))
