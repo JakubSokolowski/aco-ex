@@ -9,7 +9,6 @@ defmodule Aoc.Application do
   def start(_type, _args) do
     children = [
       AocWeb.Telemetry,
-      Aoc.Repo,
       {DNSCluster, query: Application.get_env(:aoc, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Aoc.PubSub},
       # Start the Finch HTTP client for sending emails
