@@ -10,7 +10,6 @@ kill_signal = 'SIGTERM'
 [build]
 
 [deploy]
-release_command = '/app/bin/migrate'
 
 [env]
 PHX_HOST = 'aoc-ex.fly.dev'
@@ -33,4 +32,4 @@ soft_limit = 25
 [[vm]]
 cpu_kind = 'shared'
 cpus = 1
-memory_mb = 1024
+memory_mb = 256
