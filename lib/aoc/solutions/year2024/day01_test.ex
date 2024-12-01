@@ -5,7 +5,13 @@ defmodule Aoc.Solutions.Year2024.Day01Test do
   @tag :skip
   describe "silver/1" do
     test "should solve silver for test input" do
-      input = ""
+      input = "
+      3   4
+      4   3
+      2   5
+      1   3
+      3   9
+      3   3"
 
       result = silver(input)
 
