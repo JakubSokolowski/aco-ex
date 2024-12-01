@@ -1,17 +1,5 @@
 import Config
 
-# Configure your database
-config :aoc, Aoc.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "aoc_dev",
-  #  none-standard port because I have like 6 postgres instances running in different docker containers
-  port: 5555,
-  stacktrace: true,
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 10
-
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #

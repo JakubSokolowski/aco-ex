@@ -9,10 +9,6 @@ import Config
 
 config :elixir, :time_zone_database, Tz.TimeZoneDatabase
 
-config :aoc,
-  ecto_repos: [Aoc.Repo],
-  generators: [timestamp_type: :utc_datetime]
-
 # Configures the endpoint
 config :aoc, AocWeb.Endpoint,
   url: [host: "localhost"],
