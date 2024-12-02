@@ -10,10 +10,10 @@ defmodule Aoc.Solutions.Year2024.Day02 do
   @impl true
   def gold(input) do
     to_reports(input)
-    |> Enum.count(fn r -> valid_dempened(r) end)
+    |> Enum.count(fn r -> valid_dampened(r) end)
   end
 
-  def valid_dempened(report) do
+  def valid_dampened(report) do
     if valid(report) do
       true
     end
