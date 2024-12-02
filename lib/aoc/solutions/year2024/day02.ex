@@ -19,7 +19,7 @@ defmodule Aoc.Solutions.Year2024.Day02 do
     end
 
     0..(length(report) - 1)
-    |> Enum.map(fn x -> Enum.take(report, x) ++ Enum.drop(report, x + 1) end)
+    |> Enum.map(fn x -> List.delete_at(report, x) end)
     |> Enum.any?(fn x -> valid(x) end)
   end
 
