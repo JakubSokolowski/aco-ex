@@ -17,7 +17,8 @@ defmodule AocWeb.PageController do
   end
 
   defp solution_module?(module) do
-    String.starts_with?(module, "Elixir.Aoc.Solutions.") and !String.ends_with?(module, "Test")
+    String.starts_with?(module, "Elixir.Aoc.Solutions.Year") and
+      !String.ends_with?(module, "Test")
   end
 
   defp build_solutions_struct(available) do
