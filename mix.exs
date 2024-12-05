@@ -58,7 +58,7 @@ defmodule Aoc.MixProject do
       {:bandit, "~> 1.5"},
       {:makeup, "~> 1.0"},
       {:makeup_elixir, "~> 0.16"},
-      {:igniter, "~> 0.3"},
+      {:igniter, "~> 0.4.8"},
       {:tz, "~> 0.28"}
     ]
   end
