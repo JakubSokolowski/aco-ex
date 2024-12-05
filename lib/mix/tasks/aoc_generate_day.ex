@@ -52,12 +52,12 @@ defmodule Mix.Tasks.AocGenerateDay do
         @behaviour Aoc.Solution
 
         @impl true
-        def silver(input) do
+        def silver(_input) do
           "Silver"
         end
 
         @impl true
-        def gold(input) do
+        def gold(_input) do
           "Gold"
         end
       """,
