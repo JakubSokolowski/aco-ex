@@ -4,7 +4,7 @@ defmodule Mix.Tasks.GenerateHighlightCss do
   @shortdoc "Generates CSS for syntax highlighting"
   def run(_) do
     css =
-      Makeup.Styles.HTML.StyleMap.algol_style()
+      Makeup.Styles.HTML.StyleMap.vim_style()
       |> Makeup.stylesheet()
 
     output_path = Path.join(["assets", "css", "highlight.css"])

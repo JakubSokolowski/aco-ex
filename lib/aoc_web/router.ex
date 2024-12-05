@@ -13,8 +13,7 @@ defmodule AocWeb.Router do
   scope "/", AocWeb do
     pipe_through :browser
     get "/", PageController, :home
-    get "/solutions/:year/:day", SolutionController, :show
-    post "/solutions/:year/:day/solve", SolutionController, :solve
+    live "/solutions/:year/:day", SolutionLive
   end
 
   pipeline :api do
