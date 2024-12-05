@@ -35,13 +35,18 @@ defmodule Mix.Tasks.AocGenerateDay do
     year = get_year(Map.get(arguments, :year))
 
     full_day = String.pad_leading(to_string(day), 2, "0")
-    day_module_name = Igniter.Code.Module.parse("Aoc.Solutions.Year#{year}.Day#{full_day}")
-    test_module_name = Igniter.Code.Module.parse("Aoc.Solutions.Year#{year}.Day#{full_day}Test")
+    day_module_name = Igniter.Project.Module.parse("Aoc.Solutions.Year#{year}.Day#{full_day}")
 
-    dbg({full_day, day_module_name, test_module_name})
+    test_module_name =
+      Igniter.Project.Module.parse("Aoc.Solutions.Year#{year}.Day#{full_day}Test")
+
+    input_path = Path.join(["priv", "static", "inputs", to_string(year), "day#{full_day}.txt"])
+
+    dbg({full_day, day_module_name, test_module_name, input_path})
 
     igniter
-    |> Igniter.Code.Module.create_module(
+    |> Igniter.create_new_file(input_path, "")
+    |> Igniter.Project.Module.create_module(
       day_module_name,
       """
         @behaviour Aoc.Solution
@@ -55,18 +60,32 @@ defmodule Mix.Tasks.AocGenerateDay do
         def gold(input) do
           "Gold"
         end
-      """
+      """,
+      location: :source_folder
     )
-    |> Igniter.Code.Module.create_module(
+    |> Igniter.Project.Module.create_module(
       test_module_name,
       """
       use ExUnit.Case
       import #{day_module_name}
 
+      @day #{full_day}
+      @year #{year}
+      @test_input \"\"\"
+      \"\"\"
+
       @tag :skip
       describe "silver/1" do
         test "should solve silver for test input" do
-          input = ""
+          input = @test_input
+
+          result = silver(input)
+
+          assert result
+        end
+
+        test "should solve silver for real input" do
+          input = Aoc.Solver.fetch_input(@year, @day)
 
           result = silver(input)
 
@@ -77,7 +96,15 @@ defmodule Mix.Tasks.AocGenerateDay do
       @tag :skip
       describe "gold/1" do
         test "should solve gold for test input" do
-          input = ""
+          input = @test_input
+
+          result = gold(input)
+
+          assert result
+        end
+
+        test "should solve gold for real input" do
+          input = Aoc.Solver.fetch_input(@year, @day)
 
           result = gold(input)
 
@@ -85,7 +112,8 @@ defmodule Mix.Tasks.AocGenerateDay do
         end
       end
 
-      """
+      """,
+      location: :test
     )
   end
 
