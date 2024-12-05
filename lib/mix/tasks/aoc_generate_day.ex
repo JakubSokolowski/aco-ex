@@ -45,7 +45,7 @@ defmodule Mix.Tasks.AocGenerateDay do
     dbg({full_day, day_module_name, test_module_name, input_path})
 
     igniter
-    |> Igniter.create_new_file(input_path, "")
+    |> Igniter.create_new_file(input_path, "input")
     |> Igniter.Project.Module.create_module(
       day_module_name,
       """
@@ -74,7 +74,6 @@ defmodule Mix.Tasks.AocGenerateDay do
       @test_input \"\"\"
       \"\"\"
 
-      @tag :skip
       describe "silver/1" do
         test "should solve silver for test input" do
           input = @test_input
@@ -93,7 +92,6 @@ defmodule Mix.Tasks.AocGenerateDay do
         end
       end
 
-      @tag :skip
       describe "gold/1" do
         test "should solve gold for test input" do
           input = @test_input
