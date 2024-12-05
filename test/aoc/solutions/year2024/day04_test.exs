@@ -43,7 +43,7 @@ defmodule Aoc.Solutions.Year2024.Day04Test do
     test "should solve gold for test input" do
       result = gold(@test_input)
 
-      assert result == 123
+      assert result == 9
     end
 
     test "should solve gold for real input" do
