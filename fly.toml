@@ -32,4 +32,4 @@ soft_limit = 25
 [[vm]]
 cpu_kind = 'shared'
 cpus = 1
-memory_mb = 256
+memory_mb = 1024
