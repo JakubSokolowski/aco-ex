@@ -37,7 +37,7 @@ defmodule AocWeb.SolutionLive do
         )
       end)
 
-    case Task.yield(task, 15_000) || Task.shutdown(task) do
+    case Task.yield(task, 60_000) || Task.shutdown(task) do
       {:ok, result} ->
         end_time = System.monotonic_time(:millisecond)
         solve_time = end_time - start_time
@@ -45,7 +45,11 @@ defmodule AocWeb.SolutionLive do
 
       nil ->
         {:noreply,
-         assign(socket, result: nil, error: "Solution timed out after 5 seconds", solve_time: nil)}
+         assign(socket,
+           result: nil,
+           error: "Solution timed out after 60 seconds",
+           solve_time: nil
+         )}
 
       {:exit, reason} ->
         {:noreply,
@@ -95,7 +99,11 @@ defmodule AocWeb.SolutionLive do
             />
           </div>
           <div>
-            <.button type="submit" phx-disable-with-delay={50} phx-disable-with="Solving...">
+            <.button
+              type="submit"
+              phx-disable-with-delay={50}
+              phx-disable-with="Solving... Max 60 seconds"
+            >
               Solve
             </.button>
           </div>
