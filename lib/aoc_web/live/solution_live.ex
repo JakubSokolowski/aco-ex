@@ -37,7 +37,7 @@ defmodule AocWeb.SolutionLive do
         )
       end)
 
-    case Task.yield(task, 5000) || Task.shutdown(task) do
+    case Task.yield(task, 15_000) || Task.shutdown(task) do
       {:ok, result} ->
         end_time = System.monotonic_time(:millisecond)
         solve_time = end_time - start_time
