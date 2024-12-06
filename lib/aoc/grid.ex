@@ -21,7 +21,12 @@ defmodule Aoc.Solutions.Grid do
   end
 
   def new(values, width, height) do
-    %__MODULE__{values: values, width: width, height: height}
+    array = :array.from_list(values)
+    %__MODULE__{values: array, width: width, height: height}
+  end
+
+  def element_at(grid, x, y) do
+    :array.get(y * grid.width + x, grid.values)
   end
 
   def parse(values) do
@@ -47,11 +52,6 @@ defmodule Aoc.Solutions.Grid do
     |> Enum.each(&IO.puts/1)
   end
 
-  def element_at(grid, x, y) do
-    grid.values
-    |> Enum.at(y * grid.width + x)
-  end
-
   def get_line(grid, {x, y}, {dx, dy}, len) do
     coords =
       0..len
@@ -65,6 +65,18 @@ defmodule Aoc.Solutions.Grid do
 
   def in_bounds?(grid, {x, y}) do
     x >= 0 and x < grid.width and y >= 0 and y < grid.height
+  end
+
+  def add_coords(position, delta) do
+    {x, y} = position
+    {dx, dy} = delta
+
+    {x + dx, y + dy}
+  end
+
+  def set_point(grid, {x, y}, value) do
+    new_values = :array.set(y * grid.width + x, value, grid.values)
+    %__MODULE__{grid | values: new_values}
   end
 
   def print_only_coords(grid, coords) do
@@ -86,9 +98,12 @@ defmodule Aoc.Solutions.Grid do
   end
 
   def find_coords(grid, char) do
-    for y <- 0..(grid.height - 1),
-        x <- 0..(grid.width - 1),
-        element_at(grid, x, y) == char,
-        do: {x, y}
+    indices = :array.sparse_to_orddict(grid.values)
+
+    for {idx, ^char} <- indices do
+      y = div(idx, grid.width)
+      x = rem(idx, grid.width)
+      {x, y}
+    end
   end
 end

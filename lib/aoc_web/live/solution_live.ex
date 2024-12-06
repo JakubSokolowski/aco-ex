@@ -20,20 +20,41 @@ defmodule AocWeb.SolutionLive do
        input: input,
        part: "silver",
        result: nil,
-       solve_time: nil
+       solve_time: nil,
+       error: nil
      )}
   end
 
   def handle_event("solve", %{"part" => part}, socket) do
     start_time = System.monotonic_time(:millisecond)
 
-    result =
-      Solver.solve_problem(socket.assigns.year, socket.assigns.day, String.to_existing_atom(part))
+    task =
+      Task.async(fn ->
+        Solver.solve_problem(
+          socket.assigns.year,
+          socket.assigns.day,
+          String.to_existing_atom(part)
+        )
+      end)
 
-    end_time = System.monotonic_time(:millisecond)
-    solve_time = end_time - start_time
+    case Task.yield(task, 5000) || Task.shutdown(task) do
+      {:ok, result} ->
+        end_time = System.monotonic_time(:millisecond)
+        solve_time = end_time - start_time
+        {:noreply, assign(socket, result: result, part: part, solve_time: solve_time, error: nil)}
 
-    {:noreply, assign(socket, result: result, part: part, solve_time: solve_time)}
+      nil ->
+        {:noreply,
+         assign(socket, result: nil, error: "Solution timed out after 5 seconds", solve_time: nil)}
+
+      {:exit, reason} ->
+        {:noreply,
+         assign(socket,
+           result: nil,
+           error: "Solution failed: #{inspect(reason)}",
+           solve_time: nil
+         )}
+    end
   end
 
   def render(assigns) do
@@ -80,6 +101,13 @@ defmodule AocWeb.SolutionLive do
           </div>
         </div>
       </div>
+      <%= if @error do %>
+        <div class="text-sm pt-4 space-y-2">
+          <div class="text-red-500">
+            Error: <%= @error %>
+          </div>
+        </div>
+      <% end %>
       <%= if @result do %>
         <div class="text-sm pt-4 space-y-2">
           <div class="text-gray-500 dark:text-gray-400">
