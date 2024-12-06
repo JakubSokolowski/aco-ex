@@ -88,15 +88,12 @@ defmodule Aoc.Solutions.Year2024.Day06 do
     start_points = get_start_points(grid)
     total_points = Enum.count(start_points)
 
-    # Create shared ETS tables for results and progress
     :ets.new(:loop_results, [:set, :public, :named_table])
     :ets.new(:progress_counter, [:set, :public, :named_table])
     :ets.insert(:progress_counter, {:processed, 0})
 
-    # Start progress reporter process
     progress_pid = spawn_link(fn -> report_progress(total_points) end)
 
-    # Split start points into chunks for parallel processing
     chunk_size = max(1, div(total_points, System.schedulers_online() * 2))
 
     start_points
@@ -110,10 +107,8 @@ defmodule Aoc.Solutions.Year2024.Day06 do
     )
     |> Stream.run()
 
-    # Stop progress reporter
     send(progress_pid, :stop)
 
-    # Get final count and clean up
     result = :ets.info(:loop_results, :size)
     :ets.delete(:loop_results)
     :ets.delete(:progress_counter)
@@ -138,7 +133,6 @@ defmodule Aoc.Solutions.Year2024.Day06 do
         :ets.insert(:loop_results, {start_point, true})
       end
 
-      # Update progress counter
       :ets.update_counter(:progress_counter, :processed, {2, 1})
     end)
   end
