@@ -10,6 +10,18 @@ defmodule Aoc.Solutions.GridTest do
   XMXS
   """
 
+  describe "find_all/1" do
+    test "should group coords by value" do
+      grid = Grid.parse(@test_input_min)
+
+      grouped = Grid.find_all(grid)
+
+      dbg(grouped)
+
+      assert grouped
+    end
+  end
+
   describe "parse/1" do
     test "should parse min grid" do
       grid = Grid.parse(@test_input_min)
