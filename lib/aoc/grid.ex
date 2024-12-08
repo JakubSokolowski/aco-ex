@@ -47,7 +47,9 @@ defmodule Aoc.Solutions.Grid do
   end
 
   def print(grid) do
-    Enum.chunk_every(grid.values, grid.width, grid.width, :discard)
+    grid.values
+    |> :array.to_list()
+    |> Enum.chunk_every(grid.width, grid.width, :discard)
     |> Enum.map(&Enum.join(&1, ""))
     |> Enum.each(&IO.puts/1)
   end
@@ -77,6 +79,20 @@ defmodule Aoc.Solutions.Grid do
   def set_point(grid, {x, y}, value) do
     new_values = :array.set(y * grid.width + x, value, grid.values)
     %__MODULE__{grid | values: new_values}
+  end
+
+  def find_all(grid) do
+    indices = :array.sparse_to_orddict(grid.values)
+
+    indices
+    |> Enum.group_by(
+      fn {_idx, value} -> value end,
+      fn {idx, _value} ->
+        y = div(idx, grid.width)
+        x = rem(idx, grid.width)
+        {x, y}
+      end
+    )
   end
 
   def print_only_coords(grid, coords) do
