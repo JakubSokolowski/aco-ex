@@ -16,8 +16,6 @@ defmodule Aoc.Solutions.GridTest do
 
       grouped = Grid.find_all(grid)
 
-      dbg(grouped)
-
       assert grouped
     end
   end
