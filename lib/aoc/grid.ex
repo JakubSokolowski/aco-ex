@@ -29,6 +29,18 @@ defmodule Aoc.Solutions.Grid do
     :array.get(y * grid.width + x, grid.values)
   end
 
+  def neighbours(grid, {x, y}) do
+    Enum.map(@directions, fn {dx, dy} -> {x + dx, y + dy} end)
+    |> Enum.filter(fn {x, y} -> in_bounds?(grid, {x, y}) end)
+  end
+
+  def non_diagonal_neighbours(grid, {x, y}) do
+    @directions
+    |> Enum.filter(fn {dx, dy} -> dx * dy == 0 end)
+    |> Enum.map(fn {dx, dy} -> {x + dx, y + dy} end)
+    |> Enum.filter(fn {x, y} -> in_bounds?(grid, {x, y}) end)
+  end
+
   def parse(values) do
     rows =
       values
@@ -96,7 +108,9 @@ defmodule Aoc.Solutions.Grid do
   end
 
   def print_only_coords(grid, coords) do
-    Enum.chunk_every(grid.values, grid.width, grid.width, :discard)
+    grid.values
+    |> :array.to_list()
+    |> Enum.chunk_every(grid.width, grid.width, :discard)
     |> Enum.with_index()
     |> Enum.map(fn {row, y} ->
       row

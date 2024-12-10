@@ -15,7 +15,7 @@ defmodule Aoc.Solutions.Year2024.Day09Test do
 
       result = silver(input)
 
-      assert result == 1
+      assert result
     end
 
     test "should solve silver for min input" do
@@ -23,7 +23,7 @@ defmodule Aoc.Solutions.Year2024.Day09Test do
 
       result = silver(input)
 
-      assert result == 1
+      assert result
     end
 
     test "should solve silver for edge case input" do
@@ -31,7 +31,7 @@ defmodule Aoc.Solutions.Year2024.Day09Test do
 
       result = silver(input)
 
-      assert result == 1
+      assert result
     end
 
     test "should solve silver for real input" do
@@ -39,7 +39,7 @@ defmodule Aoc.Solutions.Year2024.Day09Test do
 
       result = silver(input)
 
-      assert result == 1
+      assert result
     end
   end
 

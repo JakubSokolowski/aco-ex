@@ -6,6 +6,7 @@ defmodule Aoc.Solutions.Year2024.Day09 do
   # #2: 90489586600
   #
   # couldnt solve it in elixir, so I used python...
+  # goddamn immutable data structures
   # pending elixir solution
 
   @impl true
