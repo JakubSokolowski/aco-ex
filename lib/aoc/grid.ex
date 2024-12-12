@@ -41,6 +41,12 @@ defmodule Aoc.Solutions.Grid do
     |> Enum.filter(fn {x, y} -> in_bounds?(grid, {x, y}) end)
   end
 
+  def non_diagonal_neighbours_oob(grid, {x, y}) do
+    @directions
+    |> Enum.filter(fn {dx, dy} -> dx * dy == 0 end)
+    |> Enum.map(fn {dx, dy} -> {x + dx, y + dy} end)
+  end
+
   def parse(values) do
     rows =
       values
@@ -105,6 +111,16 @@ defmodule Aoc.Solutions.Grid do
         {x, y}
       end
     )
+  end
+
+  def all_coords(grid) do
+    indices = :array.sparse_to_orddict(grid.values)
+
+    for {idx, _value} <- indices do
+      y = div(idx, grid.width)
+      x = rem(idx, grid.width)
+      {x, y}
+    end
   end
 
   def print_only_coords(grid, coords) do
