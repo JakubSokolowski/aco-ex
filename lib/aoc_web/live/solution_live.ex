@@ -10,6 +10,7 @@ defmodule AocWeb.SolutionLive do
     solution_code = Solver.get_solution_source_code(year, day)
     highlighted_code = AocWeb.SyntaxHighlighter.higlight("\n" <> solution_code, "elixir")
     input = Solver.fetch_input(year, day)
+    adjacent_solutions = Solver.get_adjacent_solutions(year, day)
 
     {:ok,
      assign(socket,
@@ -21,7 +22,9 @@ defmodule AocWeb.SolutionLive do
        part: "silver",
        result: nil,
        solve_time: nil,
-       error: nil
+       error: nil,
+       prev_solution: adjacent_solutions.prev,
+       next_solution: adjacent_solutions.next
      )}
   end
 
@@ -64,7 +67,37 @@ defmodule AocWeb.SolutionLive do
   def render(assigns) do
     ~H"""
     <.header>
-      <.back navigate={~p"/"}>All solutions</.back>
+      <div class="flex gap-4">
+        <.link
+          navigate={~p"/"}
+          class="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+        >
+          <.icon name="hero-arrow-left-solid" class="w-4 h-4" />
+          <span>All solutions</span>
+        </.link>
+
+        <div class="flex gap-4 items-center">
+          <%= if @prev_solution do %>
+            <.link
+              navigate={~p"/solutions/#{elem(@prev_solution, 0)}/#{elem(@prev_solution, 1)}"}
+              class="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+            >
+              <.icon name="hero-arrow-left-solid" class="w-4 h-4" />
+              <span>Day <%= elem(@prev_solution, 1) %></span>
+            </.link>
+          <% end %>
+
+          <%= if @next_solution do %>
+            <.link
+              navigate={~p"/solutions/#{elem(@next_solution, 0)}/#{elem(@next_solution, 1)}"}
+              class="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+            >
+              <span>Day <%= elem(@next_solution, 1) %></span>
+              <.icon name="hero-arrow-right-solid" class="w-4 h-4" />
+            </.link>
+          <% end %>
+        </div>
+      </div>
       <p class="text-zinc-900 dark:text-zinc-100 hover:text-zinc-700 dark:hover:text-zinc-300">
         Advent of Code <%= @year %> - Day <%= @day %>
       </p>

@@ -87,4 +87,60 @@ defmodule Aoc.Solver do
       {:error, _} -> raise "Failed to read input file for Year #{year}, Day #{padded_day}"
     end
   end
+
+  @spec get_adjacent_solutions(integer(), integer()) :: %{
+          prev: {integer, integer} | nil,
+          next: {integer, integer} | nil
+        }
+  def get_adjacent_solutions(year, day) do
+    # First check the same year
+    prev = find_prev_solution(year, day)
+    next = find_next_solution(year, day)
+
+    %{
+      prev: prev,
+      next: next
+    }
+  end
+
+  defp find_prev_solution(year, day) do
+    cond do
+      # Check previous day in same year
+      day > 1 && solution_exists?(year, day - 1) ->
+        {year, day - 1}
+
+      # Check last day of previous year
+      year > 2015 && solution_exists?(year - 1, 25) ->
+        {year - 1, 25}
+
+      true ->
+        nil
+    end
+  end
+
+  defp find_next_solution(year, day) do
+    cond do
+      # Check next day in same year
+      day < 25 && solution_exists?(year, day + 1) ->
+        {year, day + 1}
+
+      # Check first day of next year
+      solution_exists?(year + 1, 1) ->
+        {year + 1, 1}
+
+      true ->
+        nil
+    end
+  end
+
+  defp solution_exists?(year, day) do
+    module_name = "Elixir.Aoc.Solutions.Year#{year}.Day#{pad_day(day)}"
+
+    try do
+      String.to_existing_atom(module_name)
+      true
+    rescue
+      ArgumentError -> false
+    end
+  end
 end
