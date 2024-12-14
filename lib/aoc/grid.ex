@@ -20,9 +20,40 @@ defmodule Aoc.Solutions.Grid do
     @directions
   end
 
+  def init_empty(width, height) do
+    new([~c"■"] |> List.duplicate(width * height), width, height)
+  end
+
   def new(values, width, height) do
     array = :array.from_list(values)
     %__MODULE__{values: array, width: width, height: height}
+  end
+
+  def move_wrap(grid, {x, y}, {dx, dy}) do
+    new_x = rem(x + dx + grid.width, grid.width)
+    new_y = rem(y + dy + grid.height, grid.height)
+    {new_x, new_y}
+  end
+
+  def count_points_in_quadrant(grid, quadrant) do
+    mid_x = div(grid.width, 2)
+    mid_y = div(grid.height, 2)
+
+    all_coords(grid)
+    |> Enum.count(fn {x, y} ->
+      case quadrant do
+        1 -> x < mid_x and y < mid_y
+        2 -> x > mid_x and y < mid_y
+        3 -> x < mid_x and y > mid_y
+        4 -> x > mid_x and y > mid_y
+      end
+    end)
+  end
+
+  def move_wrap_times(grid, {x, y}, {dx, dy}, times) do
+    {x, y}
+    |> Stream.iterate(&move_wrap(grid, &1, {dx, dy}))
+    |> Enum.take(times)
   end
 
   def element_at(grid, x, y) do
