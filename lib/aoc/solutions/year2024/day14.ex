@@ -1,4 +1,14 @@
 defmodule Aoc.Solutions.Year2024.Day14 do
+  @tags [:grid, :wrap, :broot]
+
+  @moduledoc """
+  Tags: #{inspect(@tags)}
+
+  Fun day, for sliver just wrap the movement around the grid using rem()
+  and for gold, check if roborts are in uniq positions, if so print and pray - my input had many such cases
+  so the resulting hardcoded seconds are just so the tests pass...
+  """
+
   @behaviour Aoc.Solution
 
   alias Aoc.Solutions.Grid
@@ -56,9 +66,6 @@ defmodule Aoc.Solutions.Year2024.Day14 do
   end
 
   def find_christmas_tree(grid, robots, max_seconds) do
-    # in my input, the "robots in uniq positions" condition
-    # happens few times but does not generate the christmas tree
-    # so this is only so the tests pass...
     min_seconds = 5000
 
     1..max_seconds

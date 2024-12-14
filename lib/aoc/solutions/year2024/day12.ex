@@ -1,4 +1,18 @@
 defmodule Aoc.Solutions.Year2024.Day12 do
+  @tags [:grid, :flood_fill, :broot]
+
+  @moduledoc """
+  Tags: #{inspect(@tags)}
+
+  For silver, find all regions using flood fill, get perimeter by counting
+  non-diagonal neighbours that are not in the region.
+
+  For gold, find the total number of sides by:
+
+  - getting all sides
+  - getting unique sides, by grouping by sorting and grouping by x/y axis
+  """
+
   @behaviour Aoc.Solution
 
   alias Aoc.Solutions.Grid

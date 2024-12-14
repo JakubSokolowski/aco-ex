@@ -3,6 +3,9 @@ defmodule Aoc.Solutions.Year2024.Day13 do
 
   @moduledoc """
   Tags: #{inspect(@tags)}
+
+  For both parts, solve the system of linear equations, If it has an integer
+  solution, return it, otherwis 0
   """
 
   @behaviour Aoc.Solution
