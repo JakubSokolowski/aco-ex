@@ -1,6 +1,8 @@
 defmodule Aoc.Solutions.Year2024.Day13 do
   @behaviour Aoc.Solution
 
+  @tags [:math, :linear_algebra]
+
   @impl true
   def silver(input) do
     machines = parse_machines(input)

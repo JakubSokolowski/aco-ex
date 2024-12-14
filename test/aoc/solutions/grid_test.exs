@@ -48,4 +48,17 @@ defmodule Aoc.Solutions.GridTest do
       assert line == {[{0, 0}, {1, 1}, {2, 2}, {3, 3}], ["X", "M", "A", "S"]}
     end
   end
+
+  describe "move_wrap/3" do
+    test "should move point in direction, wrapping if oob" do
+      grid = Grid.init_empty(11, 7)
+
+      coord = {0, 0}
+      direction = {-1, -1}
+
+      new_coord = Grid.move_wrap(grid, coord, direction)
+
+      assert new_coord == {10, 6}
+    end
+  end
 end
