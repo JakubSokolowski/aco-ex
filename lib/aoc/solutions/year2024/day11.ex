@@ -1,4 +1,13 @@
 defmodule Aoc.Solutions.Year2024.Day11 do
+  @tags [:memoization]
+
+  @moduledoc """
+  Tags: #{inspect(@tags)}
+
+  For both parts, do not keep the stones itself in memory, just their counts
+
+  """
+
   @behaviour Aoc.Solution
 
   @impl true

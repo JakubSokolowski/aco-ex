@@ -1,4 +1,12 @@
 defmodule Aoc.Solutions.Year2024.Day10 do
+  @tags [:grid, :flood_fill, :dfs, :bfs, :broot]
+
+  @moduledoc """
+  Tags: #{inspect(@tags)}
+
+  For silver, flood the paths, for gold, bfs all paths
+  """
+
   @behaviour Aoc.Solution
 
   alias Aoc.Solutions.Grid
