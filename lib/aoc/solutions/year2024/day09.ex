@@ -63,29 +63,11 @@ defmodule Aoc.Solutions.Year2024.Day09 do
         process_array(array, left, right - 1)
 
       true ->
-        after_first = :array.set(left, right_value, array)
+        :array.set(left, right_value, array)
         after_second = :array.set(right, nil, array)
 
         process_array(after_second, left + 1, right - 1)
     end
-  end
-
-  defp find_next_nil_from_left(disk, start) do
-    disk
-    |> Enum.drop(start)
-    |> Enum.with_index()
-    |> Enum.find(fn {value, _} -> is_nil(value) end)
-    |> case do
-      nil -> length(disk)
-      {_, index} -> start + index
-    end
-  end
-
-  defp find_next_value_from_right(disk, start) do
-    start..0
-    |> Enum.find(0, fn index ->
-      !is_nil(Enum.at(disk, index))
-    end)
   end
 
   def parse_disk(input) do
@@ -107,7 +89,7 @@ defmodule Aoc.Solutions.Year2024.Day09 do
     |> Enum.filter(fn file ->
       case file do
         [block] -> block > 0
-        [block, free] -> block > 0
+        [block, _] -> block > 0
       end
     end)
     |> Enum.with_index()

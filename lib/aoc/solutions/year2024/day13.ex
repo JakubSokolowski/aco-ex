@@ -1,7 +1,11 @@
 defmodule Aoc.Solutions.Year2024.Day13 do
-  @behaviour Aoc.Solution
+  @tags [:math, :linear_algebra, :no_broot]
 
-  @tags [:math, :linear_algebra]
+  @moduledoc """
+  Tags: #{inspect(@tags)}
+  """
+
+  @behaviour Aoc.Solution
 
   @impl true
   def silver(input) do

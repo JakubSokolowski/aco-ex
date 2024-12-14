@@ -72,7 +72,7 @@ defmodule Aoc.Solutions.Grid do
     |> Enum.filter(fn {x, y} -> in_bounds?(grid, {x, y}) end)
   end
 
-  def non_diagonal_neighbours_oob(grid, {x, y}) do
+  def non_diagonal_neighbours_oob(_grid, {x, y}) do
     @directions
     |> Enum.filter(fn {dx, dy} -> dx * dy == 0 end)
     |> Enum.map(fn {dx, dy} -> {x + dx, y + dy} end)

@@ -102,9 +102,4 @@ defmodule Aoc.Solutions.Year2024.Day10 do
 
     a_value + 1 == b_value
   end
-
-  @impl true
-  def gold(_input) do
-    "Gold"
-  end
 end
