@@ -84,7 +84,6 @@ defmodule Aoc.Solutions.Year2024.Day14 do
       count_robots = Enum.count(next_robots)
 
       if count_uniq_positions == count_robots and seconds > min_seconds do
-        Grid.print_only_coords(grid, robot_coords)
         {:halt, seconds}
       else
         {:cont, next_robots}

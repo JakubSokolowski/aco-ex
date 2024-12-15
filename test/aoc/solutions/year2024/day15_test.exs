@@ -100,8 +100,6 @@ defmodule Aoc.Solutions.Year2024.Day15Test do
       {new_map, _} = move_rows(map, robot, move)
       str_map = Grid.to_string(new_map)
 
-      Grid.print(new_map)
-
       expected = """
       ##############
       ##..[][][]..##
@@ -226,8 +224,6 @@ defmodule Aoc.Solutions.Year2024.Day15Test do
       {new_map, _} = move_rows(map, robot, move)
       str_map = Grid.to_string(new_map)
 
-      IO.puts(str_map)
-
       expected = """
       ##############
       ##..........##
@@ -332,8 +328,6 @@ defmodule Aoc.Solutions.Year2024.Day15Test do
       ##############
       """
 
-      Grid.print(new_map)
-
       assert String.trim(expected) == String.trim(str_map)
       assert new_robot == robot
     end
@@ -350,13 +344,11 @@ defmodule Aoc.Solutions.Year2024.Day15Test do
       """
 
       map = Grid.parse(input)
-      Grid.print(map)
       robot = Grid.find_coords(map, "@") |> Enum.at(0)
       move = "^"
 
       {new_map, _} = move_robot_wide(map, robot, move)
       str_map = Grid.to_string(new_map)
-      Grid.print(new_map)
 
       expected = """
       ##############
@@ -386,13 +378,11 @@ defmodule Aoc.Solutions.Year2024.Day15Test do
       """
 
       map = Grid.parse(input)
-      Grid.print(map)
       robot = Grid.find_coords(map, "@") |> Enum.at(0)
       move = "v"
 
       {new_map, new_robot} = move_robot_wide(map, robot, move)
       str_map = Grid.to_string(new_map)
-      Grid.print(new_map)
 
       expected = """
       ####################
