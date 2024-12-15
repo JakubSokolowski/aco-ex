@@ -60,6 +60,10 @@ defmodule Aoc.Solutions.Grid do
     :array.get(y * grid.width + x, grid.values)
   end
 
+  def element_at(grid, {x, y}) do
+    :array.get(y * grid.width + x, grid.values)
+  end
+
   def neighbours(grid, {x, y}) do
     Enum.map(@directions, fn {dx, dy} -> {x + dx, y + dy} end)
     |> Enum.filter(fn {x, y} -> in_bounds?(grid, {x, y}) end)
@@ -103,6 +107,14 @@ defmodule Aoc.Solutions.Grid do
     |> Enum.each(&IO.puts/1)
   end
 
+  def to_string(grid) do
+    grid.values
+    |> :array.to_list()
+    |> Enum.chunk_every(grid.width, grid.width, :discard)
+    |> Enum.map(&Enum.join(&1, ""))
+    |> Enum.join("\n")
+  end
+
   def get_line(grid, {x, y}, {dx, dy}, len) do
     coords =
       0..len
@@ -128,6 +140,15 @@ defmodule Aoc.Solutions.Grid do
   def set_point(grid, {x, y}, value) do
     new_values = :array.set(y * grid.width + x, value, grid.values)
     %__MODULE__{grid | values: new_values}
+  end
+
+  def swap_points(grid, {x1, y1}, {x2, y2}) do
+    value1 = element_at(grid, x1, y1)
+    value2 = element_at(grid, x2, y2)
+
+    grid
+    |> set_point({x1, y1}, value2)
+    |> set_point({x2, y2}, value1)
   end
 
   def find_all(grid) do
