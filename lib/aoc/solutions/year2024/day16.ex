@@ -1,9 +1,30 @@
 defmodule Aoc.Solutions.Year2024.Day16 do
+  @tags [:grid, :maze, :path_finding, :dijkstra, :prio_queue]
+
+  @moduledoc """
+  Tags: #{inspect(@tags)}
+
+  Silver: Modified Dijkstra's algorithm - track both position and direction, state is:
+  - current_pos
+  - current_dir
+  - total_cost
+  - path
+
+  Use prio queue to get lowest-cost paths first
+
+  Gold: Instead of stopping after first min path, keep sarching, get all paths, get uniq tiles.
+  Use :gb_sets for prio queue, and MapSet for visited tiles
+
+  Pretty cool, list comprehension seems cool in elixir, got messed up in part 2 had 2 rewrite
+  everything but all good
+
+  """
+
   @behaviour Aoc.Solution
 
   alias Aoc.Solutions.Grid
 
-  @directions [{0, 1}, {1, 0}, {0, -1}, {-1, 0}]
+  @dirs [{0, 1}, {1, 0}, {0, -1}, {-1, 0}]
 
   @impl true
   def silver(input) do
@@ -11,146 +32,10 @@ defmodule Aoc.Solutions.Year2024.Day16 do
     start = Grid.find_coords(map, "S") |> List.first()
     target = Grid.find_coords(map, "E") |> List.first()
 
-    case find_all_best_paths(map, start, target) do
+    case find_paths(map, start, target) do
       :no_path -> "No path found"
       {cost, _, _} -> cost
     end
-  end
-
-  def find_all_best_paths(map, start, target) do
-    initial_queue = :gb_sets.from_list([{0, start, {0, 1}, [start]}])
-
-    state_costs = %{}
-    state_paths = %{}
-
-    find_paths_recursive(map, target, initial_queue, state_costs, state_paths, [], :infinity)
-  end
-
-  defp find_paths_recursive(map, target, queue, state_costs, state_paths, best_paths, min_cost)
-       when min_cost != :infinity do
-    cond do
-      :gb_sets.is_empty(queue) ->
-        {min_cost, best_paths, all_tiles_in_paths(best_paths)}
-
-      true ->
-        {{cost, _pos, _dir, _path}, _rest} = :gb_sets.take_smallest(queue)
-
-        if cost > min_cost do
-          {min_cost, best_paths, all_tiles_in_paths(best_paths)}
-        else
-          find_paths_next_state(
-            map,
-            target,
-            queue,
-            state_costs,
-            state_paths,
-            best_paths,
-            min_cost
-          )
-        end
-    end
-  end
-
-  defp find_paths_recursive(map, target, queue, state_costs, state_paths, best_paths, min_cost) do
-    if :gb_sets.is_empty(queue) do
-      :no_path
-    else
-      find_paths_next_state(map, target, queue, state_costs, state_paths, best_paths, min_cost)
-    end
-  end
-
-  defp find_paths_next_state(map, target, queue, state_costs, state_paths, best_paths, min_cost) do
-    {{cost, pos, dir, path}, rest} = :gb_sets.take_smallest(queue)
-
-    cond do
-      pos == target ->
-        new_min_cost = cost
-        new_best_paths = [path | best_paths]
-
-        find_paths_recursive(
-          map,
-          target,
-          rest,
-          state_costs,
-          state_paths,
-          new_best_paths,
-          new_min_cost
-        )
-
-      true ->
-        neighbors = get_valid_neighbors(map, pos)
-        state = {pos, dir}
-
-        {new_queue, new_state_costs, new_state_paths} =
-          process_neighbors(neighbors, pos, dir, cost, path, rest, state_costs, state_paths)
-
-        find_paths_recursive(
-          map,
-          target,
-          new_queue,
-          new_state_costs,
-          new_state_paths,
-          best_paths,
-          min_cost
-        )
-    end
-  end
-
-  defp process_neighbors(
-         neighbors,
-         current_pos,
-         current_dir,
-         current_cost,
-         current_path,
-         queue,
-         state_costs,
-         state_paths
-       ) do
-    Enum.reduce(neighbors, {queue, state_costs, state_paths}, fn next_pos, {q, costs, paths} ->
-      if next_pos not in current_path do
-        new_dir = get_direction(current_pos, next_pos)
-        new_cost = current_cost + 1 + if(new_dir == current_dir, do: 0, else: 1000)
-        new_state = {next_pos, new_dir}
-        new_path = current_path ++ [next_pos]
-
-        current_cost = Map.get(costs, new_state, :infinity)
-
-        cond do
-          new_cost < current_cost ->
-            new_q = :gb_sets.add_element({new_cost, next_pos, new_dir, new_path}, q)
-            new_costs = Map.put(costs, new_state, new_cost)
-            new_paths = Map.put(paths, new_state, [new_path])
-            {new_q, new_costs, new_paths}
-
-          new_cost == current_cost ->
-            new_q = :gb_sets.add_element({new_cost, next_pos, new_dir, new_path}, q)
-            new_paths = Map.update(paths, new_state, [new_path], &[new_path | &1])
-            {new_q, costs, new_paths}
-
-          true ->
-            {q, costs, paths}
-        end
-      else
-        {q, costs, paths}
-      end
-    end)
-  end
-
-  defp get_valid_neighbors(map, {x, y}) do
-    @directions
-    |> Enum.map(fn {dx, dy} -> {x + dx, y + dy} end)
-    |> Enum.filter(&Grid.in_bounds?(map, &1))
-    |> Enum.filter(&(Grid.element_at(map, &1) != "#"))
-  end
-
-  defp get_direction({x1, y1}, {x2, y2}) do
-    {x2 - x1, y2 - y1}
-  end
-
-  defp all_tiles_in_paths(paths) do
-    paths
-    |> Enum.flat_map(& &1)
-    |> MapSet.new()
   end
 
   @impl true
@@ -159,9 +44,83 @@ defmodule Aoc.Solutions.Year2024.Day16 do
     start = Grid.find_coords(map, "S") |> List.first()
     target = Grid.find_coords(map, "E") |> List.first()
 
-    case find_all_best_paths(map, start, target) do
+    case find_paths(map, start, target) do
       :no_path -> "No path found"
       {cost, _, tiles} -> Enum.count(tiles)
     end
+  end
+
+  def find_paths(map, start, target) do
+    q = :gb_sets.from_list([{0, start, {0, 1}, [start]}])
+    search(map, target, q, %{}, %{}, [], :infinity)
+  end
+
+  defp search(map, target, q, costs, paths, best, min) when min != :infinity do
+    cond do
+      :gb_sets.is_empty(q) ->
+        {min, best, MapSet.new(List.flatten(best))}
+
+      true ->
+        {{cost, _, _, _}, _} = :gb_sets.take_smallest(q)
+
+        if cost > min do
+          {min, best, MapSet.new(List.flatten(best))}
+        else
+          step(map, target, q, costs, paths, best, min)
+        end
+    end
+  end
+
+  defp search(map, target, q, costs, paths, best, min) do
+    if :gb_sets.is_empty(q),
+      do: :no_path,
+      else: step(map, target, q, costs, paths, best, min)
+  end
+
+  defp step(map, target, q, costs, paths, best, min) do
+    {{cost, pos, dir, path}, rest} = :gb_sets.take_smallest(q)
+
+    if pos == target do
+      search(map, target, rest, costs, paths, [path | best], cost)
+    else
+      neighbors =
+        for {dx, dy} <- @dirs,
+            next = {pos_x, pos_y} = {elem(pos, 0) + dx, elem(pos, 1) + dy},
+            Grid.in_bounds?(map, next),
+            Grid.element_at(map, next) != "#",
+            next not in path do
+          {next, {dx, dy}}
+        end
+
+      {new_q, new_costs, new_paths} = process(neighbors, pos, dir, cost, path, rest, costs, paths)
+      search(map, target, new_q, new_costs, new_paths, best, min)
+    end
+  end
+
+  defp process(neighbors, pos, dir, cost, path, q, costs, paths) do
+    Enum.reduce(neighbors, {q, costs, paths}, fn {next, new_dir}, {q, costs, paths} ->
+      new_cost = cost + 1 + if(new_dir == dir, do: 0, else: 1000)
+      state = {next, new_dir}
+      new_path = path ++ [next]
+
+      case Map.get(costs, state, :infinity) do
+        old when new_cost < old ->
+          {
+            :gb_sets.add_element({new_cost, next, new_dir, new_path}, q),
+            Map.put(costs, state, new_cost),
+            Map.put(paths, state, [new_path])
+          }
+
+        old when new_cost == old ->
+          {
+            :gb_sets.add_element({new_cost, next, new_dir, new_path}, q),
+            costs,
+            Map.update(paths, state, [new_path], &[new_path | &1])
+          }
+
+        _ ->
+          {q, costs, paths}
+      end
+    end)
   end
 end
