@@ -21,7 +21,7 @@ defmodule Aoc.Solutions.Grid do
   end
 
   def init_empty(width, height) do
-    new([~c"■"] |> List.duplicate(width * height), width, height)
+    new(["."] |> List.duplicate(width * height), width, height)
   end
 
   def new(values, width, height) do
